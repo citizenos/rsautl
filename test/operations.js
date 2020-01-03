@@ -1,6 +1,6 @@
 var rsautl = require('../lib/rsautl');
-
-var privateKey = 
+var crypto = require('crypto');
+var privateKey =
     '-----BEGIN RSA PRIVATE KEY-----\n' +
     'MIICXAIBAAKBgQDFCUgv5ujYHAt9O//kI77WwKJiHISlnPyY00iogZSTGbIPVRD0\n' +
     'J/Oyp8ATxtHk0GCYNEhAZo2JR8UCPn4gju5D5oOacSmP3Q3BQBu57wA3CGzPbzXA\n' +
@@ -17,7 +17,7 @@ var privateKey =
     'zu4JUrnSI0Gn2JLOve63tRlq/bK0QPVZpXVEBN32aSE=\n' +
     '-----END RSA PRIVATE KEY-----';
 
-var publicKey = 
+var publicKey =
     '-----BEGIN PUBLIC KEY-----\n' +
     'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDFCUgv5ujYHAt9O//kI77WwKJi\n' +
     'HISlnPyY00iogZSTGbIPVRD0J/Oyp8ATxtHk0GCYNEhAZo2JR8UCPn4gju5D5oOa\n' +
@@ -50,6 +50,29 @@ exports.signAndVerify = function (test) {
             test.ok(err === null, err);
             test.ok(verified === testStr, 'Sign/verify mismatch');
         });
+    });
+
+    setTimeout(function () { test.done(); }, 500); // Allow for IO and computations to complete
+}
+
+exports.signAndVerifyRaw = function (test) {
+    const hash = crypto
+        .createHash('sha256')
+        .update(crypto.randomBytes(20).toString());
+    var testStr = hash.digest();
+    test.expect(3);
+    rsautl.sign(testStr, privateKey, function (err, signed) {
+        test.ok(err === null, err);
+        rsautl.verify(signed, publicKey, function (err, verified) {
+            test.ok(err === null, err);
+            test.ok(Buffer.compare(verified,testStr) === 0, 'Sign/verify mismatch');
+        }, {
+            padding: null,
+            encoding: null
+        });
+    }, {
+        padding: null,
+        encoding: null
     });
 
     setTimeout(function () { test.done(); }, 500); // Allow for IO and computations to complete

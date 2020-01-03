@@ -2,13 +2,17 @@
     "name": "rsautl",
     "version": "0.2.0",
     "description": "A wrapper for OpenSSL's rsautl",
-    "keywords": [ "rsa", "encrypt", "decrypt" ],
+    "keywords": [
+        "rsa",
+        "encrypt",
+        "decrypt"
+    ],
     "author": "Ragnar B. Johannsson <ragnar@igo.is>",
     "dependencies": {
         "temp": "*"
     },
     "devDependencies": {
-        "nodeunit": "*"
+        "nodeunit": "^0.11.3"
     },
     "scripts": {
         "test": "node_modules/.bin/nodeunit test"
@@ -17,6 +21,8 @@
         "type": "git",
         "url": "git://github.com/ragnar-johannsson/rsautl.git"
     },
-    "os": [ "!win32" ],
+    "os": [
+        "!win32"
+    ],
     "main": "./lib/rsautl"
 }
